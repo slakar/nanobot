@@ -49,6 +49,7 @@ class ProviderSpec:
 
     # gateway behavior
     strip_model_prefix: bool = False  # strip "provider/" before sending to gateway
+    supports_max_completion_tokens: bool = True # True for OpenAI, to determine how this should be in production
 
     # per-model param overrides, e.g. (("kimi-k2.5", {"temperature": 1.0}),)
     model_overrides: tuple[tuple[str, dict[str, Any]], ...] = ()
