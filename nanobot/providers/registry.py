@@ -49,7 +49,7 @@ class ProviderSpec:
 
     # gateway behavior
     strip_model_prefix: bool = False  # strip "provider/" before sending to gateway
-    supports_max_completion_tokens: bool = False # True for OpenAI, to determine how this should be in production
+    supports_max_completion_tokens: bool = True # True for OpenAI, to determine how this should be in production
 
     # per-model param overrides, e.g. (("kimi-k2.5", {"temperature": 1.0}),)
     model_overrides: tuple[tuple[str, dict[str, Any]], ...] = ()
@@ -200,7 +200,6 @@ PROVIDERS: tuple[ProviderSpec, ...] = (
         env_key="OPENAI_API_KEY",
         display_name="OpenAI",
         backend="openai_compat",
-        supports_max_completion_tokens=True,
     ),
     # OpenAI Codex: OAuth-based, dedicated provider
     ProviderSpec(
