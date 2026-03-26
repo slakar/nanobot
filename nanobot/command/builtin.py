@@ -90,6 +90,8 @@ async def cmd_help(ctx: CommandContext) -> OutboundMessage:
         "/stop — Stop the current task",
         "/restart — Restart the bot",
         "/status — Show bot status",
+        "/model_gpt_5_nano — Set model to gpt-5-nano",
+        "/model_gpt_5 — Set model to gpt-5.4",
         "/help — Show available commands",
     ]
     return OutboundMessage(
@@ -99,6 +101,15 @@ async def cmd_help(ctx: CommandContext) -> OutboundMessage:
         metadata={"render_as": "text"},
     )
 
+async def cmd_model_gpt_5_nano(ctx: CommandContext) -> OutboundMessage:
+    """Set the model to gpt-5-nano."""
+
+    return OutboundMessage(channel=msg.channel, chat_id=msg.chat_id, content="Model set to gpt-5-nano...")
+
+async def cmd_model_gpt_5(ctx: CommandContext) -> OutboundMessage:
+    """Set the model to gpt-5."""
+
+    return OutboundMessage(channel=msg.channel, chat_id=msg.chat_id, content="Model set to gpt-5...")
 
 def register_builtin_commands(router: CommandRouter) -> None:
     """Register the default set of slash commands."""
@@ -107,4 +118,6 @@ def register_builtin_commands(router: CommandRouter) -> None:
     router.priority("/status", cmd_status)
     router.exact("/new", cmd_new)
     router.exact("/status", cmd_status)
+    router.exact("/model_gpt_5_nano", cmd_model_gpt_5_nano)
+    router.exact("/model_gpt_5", cmd_model_gpt_5)
     router.exact("/help", cmd_help)
