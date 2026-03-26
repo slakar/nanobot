@@ -7,7 +7,7 @@ Primary capability: Text-to-speech using a local Azure TTS script with an API-fr
 ---
 
 Runtime: Python 3
-- Interpreter: ~/.finagent/bin/python3
+- Interpreter: ~/.venv-genagent/bin/python3
 - TTS Script: ~/projects/dev-nanobot/nanobot/skills/azure_tts/azure_tts.py
 
 Usage (automatic audio reply):
@@ -22,6 +22,7 @@ Usage (command-line):
 Notes:
 - This is a local/private skill (not published to ClawHub).
 - The azure_tts wrapper (azure_tts.py) provides a minimal programmatic interface and can be extended to integrate with the agent's generic skill runner.
-- The outputted audio (opus) file is located in the ~/.finagent/workspace/tmp/ directory.
+- The outputted audio (opus) file is located in the ~/.genagent/workspace/tmp/ directory.
 - DO NOT record the location of the audio file in memory.
-- Credentials and API key are stored in ~/.finagent/workspace/credentials/auzure_tts.json
+- Credentials and API key are stored in ~/.genagent/workspace/credentials/auzure_tts.json
+- Do **not** respond with any text when an audio response is requested. Only send the audio file as a response.

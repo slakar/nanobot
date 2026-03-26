@@ -3,7 +3,7 @@
 """#!/usr/bin/env python3
 
 Azure TTS wrapper for nanobot
-- Reads credentials from ~/.nanobot/workspace/credentials/azure_tts.json
+- Reads credentials from ~/.genagent/workspace/credentials/azure_tts.json
 - synthesize_text(text, voice=None, fmt=None, output_path=None)
 - Azure returns Opus audio directly when using an Opus output format
 
@@ -19,12 +19,12 @@ from xml.sax.saxutils import escape
 import requests
 import sys
 
-CREDENTIALS_PATH = os.path.expanduser("~/.nanobot/workspace/credentials/azure_tts.json")
+CREDENTIALS_PATH = os.path.expanduser("~/.genagent/workspace/credentials/azure_tts.json")
 SYN_ENDPOINT_TEMPLATE = "https://{region}.tts.speech.microsoft.com/cognitiveservices/v1"
 DEFAULT_OUTPUT_FORMAT = "ogg-24khz-16bit-mono-opus"
 HEADERS = {
     "Content-Type": "application/ssml+xml",
-    "User-Agent": "nanobot-azure-tts",
+    "User-Agent": "nanobot",
 }
 
 
@@ -52,7 +52,7 @@ def _build_ssml(text, voice, lang="en-US"):
 
 
 def _ensure_output_dir():
-    out_dir = "/tmp/nanobot_azure_tts"
+    out_dir = "/tmp/azure_tts"
     os.makedirs(out_dir, exist_ok=True)
     return out_dir
 
@@ -97,7 +97,7 @@ def synthesize_text(text, voice=None, fmt=None, output_path=None):
         raise RuntimeError(f"Azure TTS returned unexpected content type: {content_type}")
 
     if output_path is None:
-        output_path=f"/home/sachin/.nanobot/workspace/tmp/{int(time.time())}.opus"
+        output_path=f"/home/sachin/.genagent/workspace/tmp/{int(time.time())}.opus"
 
     with open(output_path, "wb") as f:
         for chunk in response.iter_content(chunk_size=4096):
