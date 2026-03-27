@@ -51,6 +51,10 @@ class EmailConfig(Base):
     subject_prefix: str = "Re: "
     allow_from: list[str] = Field(default_factory=list)
 
+    # Email authentication verification (anti-spoofing)
+    verify_dkim: bool = True   # Require Authentication-Results with dkim=pass
+    verify_spf: bool = True    # Require Authentication-Results with spf=pass
+
 
 class EmailChannel(BaseChannel):
     """
