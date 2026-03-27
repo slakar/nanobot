@@ -103,13 +103,21 @@ async def cmd_help(ctx: CommandContext) -> OutboundMessage:
 
 async def cmd_model_gpt_5_nano(ctx: CommandContext) -> OutboundMessage:
     """Set the model to gpt-5-nano."""
+    ctx.loop.model = "gpt-5-nano"
 
-    return OutboundMessage(channel=msg.channel, chat_id=msg.chat_id, content="Model set to gpt-5-nano...")
+    return OutboundMessage(
+        channel=ctx.msg.channel, chat_id=ctx.msg.chat_id,
+        content="Model set to gpt-5-nano...",
+    )
 
 async def cmd_model_gpt_5(ctx: CommandContext) -> OutboundMessage:
     """Set the model to gpt-5."""
+    ctx.loop.model = "gpt-5.4"
 
-    return OutboundMessage(channel=msg.channel, chat_id=msg.chat_id, content="Model set to gpt-5...")
+    return OutboundMessage(
+        channel=ctx.msg.channel, chat_id=ctx.msg.chat_id,
+        content="Model set to gpt-5...",
+    )
 
 def register_builtin_commands(router: CommandRouter) -> None:
     """Register the default set of slash commands."""
