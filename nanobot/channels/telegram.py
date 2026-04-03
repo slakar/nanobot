@@ -199,8 +199,7 @@ class TelegramChannel(BaseChannel):
         BotCommand("help", "Show available commands"),
         BotCommand("restart", "Restart the bot"),
         BotCommand("subagent", "Spawn new subagent"),
-        BotCommand("model_gpt_5_nano", "Set model to gpt-5-nano"),
-        BotCommand("model_gpt_5", "Set model to gpt-5.4"),
+        BotCommand("model", "Set model to custom provider and model"),
         BotCommand("status", "Show bot status"),
     ]
 
