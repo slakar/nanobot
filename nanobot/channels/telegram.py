@@ -198,6 +198,7 @@ class TelegramChannel(BaseChannel):
         BotCommand("stop", "Stop the current task"),
         BotCommand("help", "Show available commands"),
         BotCommand("restart", "Restart the bot"),
+        BotCommand("subagent", "Spawn new subagent"),
         BotCommand("model_gpt_5_nano", "Set model to gpt-5-nano"),
         BotCommand("model_gpt_5", "Set model to gpt-5.4"),
         BotCommand("status", "Show bot status"),
@@ -283,6 +284,7 @@ class TelegramChannel(BaseChannel):
         self._app.add_handler(CommandHandler("stop", self._forward_command))
         self._app.add_handler(CommandHandler("restart", self._forward_command))
         self._app.add_handler(CommandHandler("status", self._forward_command))
+        self._app.add_handler(CommandHandler("subagent", self._forward_command))
         self._app.add_handler(CommandHandler("model_gpt_5_nano", self._forward_command))
         self._app.add_handler(CommandHandler("model_gpt_5", self._forward_command))
         self._app.add_handler(CommandHandler("help", self._on_help))
@@ -591,8 +593,8 @@ class TelegramChannel(BaseChannel):
             "/stop — Stop the current task\n"
             "/restart — Restart the bot\n"
             "/status — Show bot status\n"
-            "/model_gpt_5_nano — Set model to gpt-5-nano\n"
-            "/model_gpt_5 — Set model to gpt-5.4\n"
+            "/subagent — Spawn a new subagent\n"
+            "/model — Set model to custom provider and model\n"
             "/help — Show available commands"
         )
 
