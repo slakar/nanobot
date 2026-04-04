@@ -279,8 +279,9 @@ class TelegramChannel(BaseChannel):
 
         # Add command handlers (using Regex to support @username suffixes before bot initialization)
         self._app.add_handler(MessageHandler(filters.Regex(r"^/start(?:@\w+)?$"), self._on_start))
-        self._app.add_handler(MessageHandler(filters.Regex(r"^/(new|stop|restart|status|model)(?:@\w+)?$"), self._forward_command))
+        self._app.add_handler(MessageHandler(filters.Regex(r"^/(new|stop|restart|status)(?:@\w+)?(?:\s+|$)"), self._forward_command))
         self._app.add_handler(MessageHandler(filters.Regex(r"^/help(?:@\w+)?$"), self._on_help))
+        self._app.add_handler(MessageHandler(filters.Regex(r"^/model(?:@\w+)?(?:\s+|$)"), self._forward_command))
 
         # Add message handler for text, photos, voice, documents
         self._app.add_handler(

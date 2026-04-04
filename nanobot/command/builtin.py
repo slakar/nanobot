@@ -139,7 +139,7 @@ async def cmd_spawn_subagent(ctx: CommandContext) -> OutboundMessage:
 async def cmd_model_set(ctx: CommandContext) -> OutboundMessage:
     """Set the provider and model."""
     params = ctx.msg.content.split()
-    if len(params) == 2:
+    if len(params) == 3:
         ctx.loop.provider = params[1]
         ctx.loop.model = params[2]
 
