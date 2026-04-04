@@ -9,6 +9,7 @@ from typing import Any
 from nanobot.utils.helpers import current_time_str
 
 from nanobot.agent.memory import MemoryStore
+from nanobot.utils.prompt_templates import render_template
 from nanobot.agent.skills import SkillsLoader
 from nanobot.utils.helpers import build_assistant_message, detect_image_mime
 
@@ -45,12 +46,7 @@ class ContextBuilder:
 
         skills_summary = self.skills.build_skills_summary()
         if skills_summary:
-            parts.append(f"""# Skills
-
-The following skills extend your capabilities. To use a skill, read its SKILL.md file using the read_file tool.
-Skills with available="false" need dependencies installed first - you can try installing them with apt/brew.
-
-{skills_summary}""")
+            parts.append(render_template("agent/skills_section.md", skills_summary=skills_summary))
 
         return "\n\n---\n\n".join(parts)
 
@@ -60,33 +56,12 @@ Skills with available="false" need dependencies installed first - you can try in
         system = platform.system()
         runtime = f"{'macOS' if system == 'Darwin' else system} {platform.machine()}, Python {platform.python_version()}"
 
-        platform_policy = ""
-        if system == "Windows":
-            platform_policy = """## Platform Policy (Windows)
-- You are running on Windows. Do not assume GNU tools like `grep`, `sed`, or `awk` exist.
-- Prefer Windows-native commands or file tools when they are more reliable.
-- If terminal output is garbled, retry with UTF-8 output enabled.
-"""
-        else:
-            platform_policy = """## Platform Policy (POSIX)
-- You are running on a POSIX system. Prefer UTF-8 and standard shell tools.
-- Use file tools when they are simpler or more reliable than shell commands.
-"""
-
-        return f"""
-## Runtime Environment
-Your runtime environment is: {runtime}
-
-## Workspace
-Your workspace is located at: {workspace_path}
-
-Key files and directories:
-- Long-term memory: {workspace_path}/memory/MEMORY.md (write important facts here)
-- History log: {workspace_path}/memory/HISTORY.md (grep-searchable). Each entry starts with [YYYY-MM-DD HH:MM].
-- Custom skills: {workspace_path}/skills/{{skill-name}}/SKILL.md
-
-{platform_policy}
-"""
+        return render_template(
+            "agent/identity.md",
+            workspace_path=workspace_path,
+            runtime=runtime,
+            platform_policy=render_template("agent/platform_policy.md", system=system),
+        )
 
     @staticmethod
     def _build_runtime_context(
