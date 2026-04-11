@@ -125,7 +125,7 @@ class SkillsLoader:
         for s in all_skills:
             name = _escape_xml(s["name"])
             path = s["path"]
-            desc = escape_xml(self._get_skill_description(name))
+            desc = _escape_xml(self._get_skill_description(name))
             skill_meta = self._get_skill_meta(name)
             available = self._check_requirements(skill_meta)
 
