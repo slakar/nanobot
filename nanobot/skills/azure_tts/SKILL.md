@@ -1,10 +1,10 @@
-# azure_tts
-
 ---
 name: azure-tts
 description: Convert text to audio by invoking a local TTS script (Azure) when an audio response is required. This integration supports automatic audio reply by exposing synthesize(text) -> path to audio file.
 Primary capability: Text-to-speech using a local Azure TTS script with an API-friendly interface.
 ---
+
+# azure_tts
 
 Runtime: Python 3
 - Interpreter: ~/.venv-genagent/bin/python3
