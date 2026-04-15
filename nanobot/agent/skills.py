@@ -16,10 +16,6 @@ _STRIP_SKILL_FRONTMATTER = re.compile(
 )
 
 
-def _escape_xml(text: str) -> str:
-    return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-
-
 class SkillsLoader:
     """
     Loader for agent skills.
@@ -110,41 +106,37 @@ class SkillsLoader:
         ]
         return "\n\n---\n\n".join(parts)
 
-    def build_skills_summary(self) -> str:
+    def build_skills_summary(self, exclude: set[str] | None = None) -> str:
         """
         Build a summary of all skills (name, description, path, availability).
 
         This is used for progressive loading - the agent can read the full
         skill content using read_file when needed.
 
+        Args:
+            exclude: Set of skill names to omit from the summary.
+
         Returns:
-            XML-formatted skills summary.
+            Markdown-formatted skills summary.
         """
         all_skills = self.list_skills(filter_unavailable=False)
         if not all_skills:
             return ""
 
-        cnt = 1
-        lines: list[str] = [f"skills[{len(all_skills)}]{{available,name,description,location,requires}}"]
-        for s in all_skills:
-            name = _escape_xml(s["name"])
-            path = s["path"]
-            desc = _escape_xml(self._get_skill_description(name))
-            skill_meta = self._get_skill_meta(name)
-            available = self._check_requirements(skill_meta)
-
-            # Show missing requirements for unavailable skills
-            if not available:
-                if self._get_missing_requirements(skill_meta):
-                    missing = f"{_escape_xml(self._get_missing_requirements(skill_meta))}"
-                else:
-                    missing = "Missing dependencies not listed"
+        lines: list[str] = []
+        for entry in all_skills:
+            skill_name = entry["name"]
+            if exclude and skill_name in exclude:
+                continue
+            meta = self._get_skill_meta(skill_name)
+            available = self._check_requirements(meta)
+            desc = self._get_skill_description(skill_name)
+            if available:
+                lines.append(f"- **{skill_name}** — {desc}  `{entry['path']}`")
             else:
-                missing = "N/A"
-
-            lines.extend(f"{cnt}. ,'{str(available).lower()}', '{name}', '{desc}', '{path}', '{missing}'")
-            cnt += 1
-
+                missing = self._get_missing_requirements(meta)
+                suffix = f" (unavailable: {missing})" if missing else " (unavailable)"
+                lines.append(f"- **{skill_name}** — {desc}{suffix}  `{entry['path']}`")
         return "\n".join(lines)
 
     def _get_missing_requirements(self, skill_meta: dict) -> str:
