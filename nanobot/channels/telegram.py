@@ -12,7 +12,14 @@ from typing import Any, Literal
 
 from loguru import logger
 from pydantic import Field
-from telegram import BotCommand, InlineKeyboardButton, InlineKeyboardMarkup, ReactionTypeEmoji, ReplyParameters, Update
+from telegram import (
+    BotCommand,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    ReactionTypeEmoji,
+    ReplyParameters,
+    Update,
+)
 from telegram.error import BadRequest, NetworkError, TimedOut
 from telegram.ext import Application, CallbackQueryHandler, ContextTypes, MessageHandler, filters
 from telegram.request import HTTPXRequest
@@ -255,6 +262,7 @@ class TelegramChannel(BaseChannel):
         BotCommand("subagent", "Spawn new subagent"),
         BotCommand("model", "Set model to custom provider and model"),
         BotCommand("status", "Show bot status"),
+        BotCommand("history", "Show recent conversation messages"),
         BotCommand("dream", "Run Dream memory consolidation now"),
         BotCommand("dream_log", "Show the latest Dream memory change"),
         BotCommand("dream_restore", "Restore Dream memory to an earlier version"),
@@ -519,13 +527,15 @@ class TelegramChannel(BaseChannel):
                     continue
 
                 media_bytes = Path(media_path).read_bytes()
+                filename = Path(media_path).name
+                send_kwargs = {param: media_bytes, "filename": filename}
                 await self._call_with_retry(
                     sender,
                     chat_id=chat_id,
-                    **{param: media_bytes},
                     reply_parameters=reply_params,
                     **thread_kwargs,
                     **extra,
+                    **send_kwargs,
                 )
             except Exception as e:
                 filename = media_path.rsplit("/", 1)[-1]
